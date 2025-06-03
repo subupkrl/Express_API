@@ -47,13 +47,13 @@ exports.categoryDetails = async(req,res)=>{
 //to update category
 exports.updateCategory = async(req,res)=>{
     const category = await Category.findByIdAndUpdate
-    {
+    (
         req.params.id,
         {
             category_name: req.body.category_name
         },
         {new:true} //to show updated values in result
-    }
+    )
      if(!category){
         return res.status(400).json({error:"Something went wrong"})
     }

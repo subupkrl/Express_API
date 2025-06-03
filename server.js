@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 
 const testRoute = require("./routes/testRoute")
 const categoryRoute = require("./routes/categoryRoute")
+const productRoute = require("./routes/productRoute")
 
 
 const app = express()
@@ -21,6 +22,7 @@ app.use(bodyParser.json())
 //routes
 app.use("/api",testRoute);
 app.use("/api",categoryRoute);
+app.use("/api",productRoute);
 
 port = process.env.PORT || 5000
 
