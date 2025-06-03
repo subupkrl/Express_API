@@ -1,18 +1,26 @@
 const express = require("express");
 require('dotenv').config()
+require('./db/connection')
+
+const bodyParser = require('body-parser')
 
 const testRoute = require("./routes/testRoute")
+const categoryRoute = require("./routes/categoryRoute")
 
 
 const app = express()
 
-app.get("/test",(req,res)=>{
-    res.send("This is API Server")
-})
+// app.get("/test",(req,res)=>{
+//     res.send("This is API Server")
+// })
+
+//middleware
+app.use(bodyParser.json())
 
 
 //routes
-app.use("/api",testRoute)
+app.use("/api",testRoute);
+app.use("/api",categoryRoute);
 
 port = process.env.PORT || 5000
 
