@@ -34,10 +34,8 @@ exports.postUser = async(req,res)=>{
                 to : user.email,
                 subject : "Email Verification Link",
                 text : `Hello,\n\n Please verify your email by using the below link\n\n
-                http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,
-                html : `
-                <h1>Verify your Email</h1>
-                `
+                http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,  
+                html:`<h1>Verify your Email</h1>`  
             })
             res.send(user)
         }
@@ -188,13 +186,14 @@ exports.requireUser = (req,res,next)=>{
     //verify jwt
     expressjwt({
         secret:process.env.JWT_SECRET,
-        algorithm:['HS256']
+        algorithm:['HS256'],
+        reqProperty:"auth"
     })(req,res,(err)=>{
         if(err){
             return res.status(401).json({error:"Unauthorized "})
         }
         //check for user role
-        if(req.user.role === 0){
+        if(req.auth.role === 0){
             //grant access
             next()
         }else{
@@ -209,13 +208,14 @@ exports.requireAdmin = (req,res,next)=>{
     //verify jwt
     expressjwt({
         secret:process.env.JWT_SECRET,
-        algorithms:['HS256']
+        algorithms:['HS256'],
+        reqProperty:"auth"
     })(req,res,(err)=>{
         if(err){
             return res.status(401).json({error:"Unauthorized "})
         }
         //check for user role
-        if(req.user.role === 1){
+        if(req.auth.role === 1){
             //grant access
             next()
         }else{

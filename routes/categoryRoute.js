@@ -5,7 +5,7 @@ const { requireAdmin } = require("../controllers/authController")
 
 const router = express.Router()
 
-router.post("/postcategory",requireAdmin,postCategory)
+router.post("/postcategory",postCategory)
 router.get("/categorylist",showCategoryList)
 router.get("/categorydetails/:id",categoryDetails)
 router.put("/updatecategory/:id",requireAdmin,updateCategory)
