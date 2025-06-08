@@ -37,7 +37,6 @@ const Order = new mongoose.Schema({
     },
     totalPrice:{
         type:Number,
-        required:true
     },
     user:{
         type:ObjectId,

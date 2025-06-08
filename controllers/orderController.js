@@ -4,10 +4,12 @@ const Order = require("../models/orderModel")
 //post order
 exports.postOrder = async(req,res)=>{
     const orderItemIds = await Promise.all(req.body.orderItems.map(async orderItem=>{
+        console.log(req.body)
        let newOrderItem = new OrderItem({
         quantity:orderItem.quantity,
         product:orderItem.product
        }) 
+
        newOrderItem = await newOrderItem.save()
        return newOrderItem._id
     }))
@@ -27,9 +29,10 @@ exports.postOrder = async(req,res)=>{
         shippingAddress1:req.body.shippingAddress1,
         shippingAddress2:req.body.shippingAddress2,
         city:req.body.city,
-        zip:req.body,zip,
-        phone:req,body,phone,
-        country:req.body.country
+        zip:req.body.zip,
+        phone:req.body.phone,
+        country:req.body.country,
+        user:req.body.user
     })
     order = await order.save()
     if(!order){

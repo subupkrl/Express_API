@@ -29,13 +29,13 @@ const imageFilter = (req,file,cb)=>{
     //regular expression for file format allowed
     const validImageTypes = /\.(jpg|png|jpeg|svg|gif)$/i
     if(!file.originalname.match(validImageTypes)){
-        return (new Error("You can upload image file only"),false)
+        return cb(new Error("You can upload image file only"),false)
     }
     cb(null,true)
 }
 
 //multer upload function initialization
-const upload = multer 
+exports.upload = multer 
 ({
     storage:storage,
     fileFilter:imageFilter,
@@ -44,4 +44,14 @@ const upload = multer
     }
 })
 
-module.exports = upload
+//middleware to handle multer storage
+exports.handleMulterError = async(err,req,res,next)=>{
+    if(err instanceof multer.MulterError){
+        return res.status(400).json({error:err.message})
+    }
+    else if(err){
+        //unknown error 
+        return res.status(400).json({error:err.message})
+    }
+    next()
+}

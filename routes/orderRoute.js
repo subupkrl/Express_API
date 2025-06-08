@@ -7,6 +7,6 @@ router.get("/orderlist",orderList)
 router.get("/orderdetails/:id",orderDetails)
 router.put("/updatestatus/:id",updateStatus)
 router.get("/userorderlist/:userId",userOrders)
-router.delete("deleteorder",deleteOrder)
+router.delete("/deleteorder",deleteOrder)
 
 module.exports = router

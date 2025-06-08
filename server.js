@@ -4,6 +4,7 @@ require('./db/connection')
 
 const bodyParser = require('body-parser')
 const morgan = require("morgan")
+const cors = require("cors")
 
 const testRoute = require("./routes/testRoute")
 const categoryRoute = require("./routes/categoryRoute")
@@ -20,8 +21,10 @@ const app = express()
 
 //middleware
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
 app.use(morgan("dev"))
 app.use("/public/uploads",express.static("public/uploads"))
+app.use(cors())
 
 
 //routes
