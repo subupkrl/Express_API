@@ -4,6 +4,8 @@ const crypto = require("crypto")
 const sendEmail = require("../utils/setEmail")
 const jwt = require("jsonwebtoken") //authentication
 const {expressjwt}=require("express-jwt") //for authorization
+const path = require("path")
+const fs = require("fs")
 
 //to register a new user
 exports.postUser = async(req,res)=>{
@@ -28,6 +30,17 @@ exports.postUser = async(req,res)=>{
             if (!token){
                 return res.status(400).json({error:"Failed to create a token"})
             }
+            //load email template
+            const templatePath = path.join(__dirname,"emailTemplate.html")
+            let emailTemplate = fs.readFileSync(templatePath,"utf-8")
+
+            //verification url
+            const verificationUrl = `${process.env.FRONTEND_URL}/email/confirmation/${token.token}`
+
+            //replace placeholder by verification url
+            emailTemplate = emailTemplate.replace(`{{url}}`,verificationUrl)
+
+
             //send email process
             sendEmail({
                 from : "no-reply@online-store.com",
@@ -35,7 +48,7 @@ exports.postUser = async(req,res)=>{
                 subject : "Email Verification Link",
                 text : `Hello,\n\n Please verify your email by using the below link\n\n
                 http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,  
-                html:`<h1>Verify your Email</h1>`  
+                 html:emailTemplate
             })
             res.send(user)
         }
@@ -126,15 +139,24 @@ exports.forgotPassword = async(req,res)=>{
     if(!token){
         return res.status(400).json({error:"Failed to create a token"})
     }
+
+        //load email template
+            const templatePath = path.join(__dirname,"passwordTemplate.html")
+            let pwdTemplate = fs.readFileSync(templatePath,"utf-8")
+
+            //verification url
+            const pwdResetUrl = `${process.env.FRONTEND_URL}/reset/confirmation/${token.token}`
+
+            //replace placeholder by verification url
+            pwdTemplate = pwdTemplate.replace(`{{url}}`,pwdResetUrl)
+
      sendEmail({
                 from : "no-reply@online-store.com",
                 to : user.email,
                 subject : "Password Reset Link",
                 text : `Hello,\n\n Please reset your password by using the below link\n\n
                 http:\/\/${req.headers.host}\/api\/reset\/password\/${token.token}`,
-                html : `
-                <h1>Password Reset</h1>
-                `
+                html : pwdTemplate
             })
             res.json({msg:"Password reset link has been sent to your email"})
 }
