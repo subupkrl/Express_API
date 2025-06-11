@@ -48,7 +48,7 @@ exports.postUser = async(req,res)=>{
                 subject : "Email Verification Link",
                 text : `Hello,\n\n Please verify your email by using the below link\n\n
                 http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,  
-                 html:emailTemplate
+                html:emailTemplate
             })
             res.send(user)
         }
@@ -145,7 +145,7 @@ exports.forgotPassword = async(req,res)=>{
             let pwdTemplate = fs.readFileSync(templatePath,"utf-8")
 
             //verification url
-            const pwdResetUrl = `${process.env.FRONTEND_URL}/reset/confirmation/${token.token}`
+            const pwdResetUrl = `${process.env.FRONTEND_URL}/reset/password/${token.token}`
 
             //replace placeholder by verification url
             pwdTemplate = pwdTemplate.replace(`{{url}}`,pwdResetUrl)
@@ -245,4 +245,10 @@ exports.requireAdmin = (req,res,next)=>{
             return res.status(403).json({error:"Forbidden"})
         }
     })
+}
+
+//signout
+exports.signOut=(req,res)=>{
+    res.clearCookie("myCookie")
+    res.json({msg:"Signout successfully"})
 }
